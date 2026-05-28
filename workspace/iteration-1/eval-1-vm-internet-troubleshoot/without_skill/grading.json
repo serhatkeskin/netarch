@@ -1,0 +1,40 @@
+{
+  "eval_id": 1,
+  "eval_name": "vm-internet-troubleshoot",
+  "configuration": "without_skill",
+  "expectations": [
+    {
+      "text": "Output includes check for IP forwarding (/proc/sys/net/ipv4/ip_forward or sysctl)",
+      "passed": true,
+      "evidence": "Agent summary: '2. IP forwarding disabled on Proxmox host (/proc/sys/net/ipv4/ip_forward)' — kontrol komutu mevcut"
+    },
+    {
+      "text": "Output includes iptables NAT table inspection command",
+      "passed": true,
+      "evidence": "Agent summary: '3. No NAT/masquerade iptables rule for the 10.10.1.0/24 subnet' — nat tablosu kontrolü mevcut"
+    },
+    {
+      "text": "Output identifies missing MASQUERADE rule as a likely cause",
+      "passed": true,
+      "evidence": "Agent summary: 'Most likely root cause: explicit NAT (POSTROUTING masquerade) + IP forwarding' açıkça belirtilmiş"
+    },
+    {
+      "text": "Output follows a phased troubleshoot approach (read-only first, then fix)",
+      "passed": false,
+      "evidence": "7 diagnostic area sıralı olarak verilmiş ama skill'in Phase 1/2/3/4 yapısı yok — diagnostics ve fixes karışık sunulmuş"
+    },
+    {
+      "text": "Output includes verification commands after fix (ping, curl)",
+      "passed": true,
+      "evidence": "Agent summary: layered ping test decision table mevcut (gateway → 8.8.8.8 → google.com)"
+    },
+    {
+      "text": "Output does NOT apply iptables changes without presenting them to user first",
+      "passed": true,
+      "evidence": "Sadece tanı ve fix komutları gösterilmiş, doğrudan çalıştırılmamış"
+    }
+  ],
+  "pass_count": 5,
+  "total_count": 6,
+  "pass_rate": 0.833
+}

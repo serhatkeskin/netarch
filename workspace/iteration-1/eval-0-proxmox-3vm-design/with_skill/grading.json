@@ -1,0 +1,40 @@
+{
+  "eval_id": 0,
+  "eval_name": "proxmox-3vm-design",
+  "configuration": "with_skill",
+  "expectations": [
+    {
+      "text": "Output contains a Mermaid diagram block (```mermaid)",
+      "passed": true,
+      "evidence": "networking.md satır 16: ```mermaid bloğu var, graph TB ile Proxmox host, vmbr1, vmbr2, Web/App/DB VM'leri gösteriliyor"
+    },
+    {
+      "text": "Output defines at least 3 distinct networks or bridges (DMZ/web, app, DB)",
+      "passed": true,
+      "evidence": "vmbr0 (WAN), vmbr1 DMZ 10.10.1.0/24, vmbr2 Internal 10.10.2.0/24 — 3 ayrı bridge tanımlı"
+    },
+    {
+      "text": "Output explicitly states DB is accessible only from app subnet (iptables DROP or similar)",
+      "passed": true,
+      "evidence": "Traffic Policy tablosunda 'App VM → DB VM 5432 ALLOW', 'DMZ → Internal DROP', 'Internet → DB DROP' açıkça belirtilmiş. iptables kuralında sadece 10.10.2.10→10.10.2.20:5432 ACCEPT, DB'nin internete çıkması DROP"
+    },
+    {
+      "text": "Output includes iptables FORWARD chain rules",
+      "passed": true,
+      "evidence": "netarch-setup.sh içinde iptables -A FORWARD kuralları mevcut: ESTABLISHED, Web→App, App→DB, MASQUERADE yönlendirmeleri, default DROP"
+    },
+    {
+      "text": "Output includes a subnet/network table with CIDR notation",
+      "passed": true,
+      "evidence": "Subnets tablosunda 10.10.1.0/24 (DMZ/vmbr1) ve 10.10.2.0/24 (Internal/vmbr2) var"
+    },
+    {
+      "text": "networking.md file was actually written to outputs directory",
+      "passed": true,
+      "evidence": "Dosya mevcut: eval-0-proxmox-3vm-design/with_skill/outputs/networking.md (402 satır)"
+    }
+  ],
+  "pass_count": 6,
+  "total_count": 6,
+  "pass_rate": 1.0
+}

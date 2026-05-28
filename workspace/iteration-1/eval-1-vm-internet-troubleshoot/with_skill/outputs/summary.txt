@@ -1,0 +1,31 @@
+NETARCH SKILL — TROUBLESHOOT EVAL SUMMARY
+==========================================
+Task: VM on vmbr1 (10.10.1.10/24) cannot reach internet
+Mode: Troubleshoot (simulation)
+
+SKILL BEHAVIOR:
+- Correctly identified the 3 most common root causes for this scenario
+- Produced Phase 1 diagnostic commands (11 READ-ONLY commands covering host + VM side)
+- Produced Phase 2 diagnosis table with simulated findings and severity
+- Produced Phase 3 fix script with per-command explanations and risk labels
+- Produced Phase 4 verification commands with expected outputs
+- Included rollback commands before any destructive step
+- Flagged the need to confirm actual interface name (vmbr0 vs eth0) via `ip route show default`
+
+ROOT CAUSES IDENTIFIED:
+1. IP forwarding disabled (ip_forward = 0) — most common cause
+2. Missing MASQUERADE NAT rule for 10.10.1.0/24 subnet
+3. iptables FORWARD chain DROP policy blocking vmbr1 → vmbr0 traffic
+
+FIX APPROACH:
+- Phase A (quick test): 3 iptables/sysctl commands applied live
+- Phase B (permanent): /etc/network/interfaces post-up hooks + sysctl.conf
+- Rollback: full iptables flush commands provided
+
+SKILL QUALITY NOTES:
+- Followed all 4 phases as defined in SKILL.md
+- Used risk labels (READ-ONLY, CONFIG CHANGE, NETWORK CHANGE)
+- Included rollback before destructive steps (safety rule compliance)
+- Topology diagram rendered with ASCII (no Mermaid renderer assumed)
+- Commands match patterns in both proxmox.md and iptables.md references
+- Simulation mode clearly noted — no actual SSH attempted

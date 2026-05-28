@@ -1,0 +1,23 @@
+{
+  "skill_name": "netarch",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "Proxmox'umda 3 VM var: web sunucusu (internete açık), uygulama sunucusu ve veritabanı. Web dışarıdan erişilebilsin, DB sadece app VM'inden erişilebilsin, ikisi de internete çıkabilsin. Nasıl kurarım?",
+      "expected_output": "Mermaid topoloji diyagramı, subnet planı (CIDR, bridge adları), iptables kuralları, networking.md dosyası",
+      "files": []
+    },
+    {
+      "id": 1,
+      "prompt": "Proxmox'ta vmbr1'e bağlı VM'lerim internete çıkamıyor. IP adresi var (10.10.1.10/24) ama dışarıya ping atamıyor. Ne yapmalıyım?",
+      "expected_output": "Adım adım troubleshoot planı: ip_forward kontrolü, iptables NAT kontrolü, route kontrolü, diagnostic komutları, düzeltme önerileri",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "VPS'imde iki subnet istiyorum: 10.0.1.0/24 (VM'ler internete çıkabilsin) ve 10.0.2.0/24 (tamamen izole, hiçbir dış erişim yok). ssh root@203.0.113.5 ile bağlanabilirim.",
+      "expected_output": "Uygulama scripti veya adım adım SSH komutları, her iki subnet için bridge config, iptables kuralları, doğrulama komutları",
+      "files": []
+    }
+  ]
+}

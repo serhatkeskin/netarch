@@ -1,0 +1,30 @@
+SUMMARY: Proxmox 3-VM Network Architecture (without skill)
+
+TASK: Design network isolation for 3 VMs on Proxmox:
+- Web VM: internet-facing
+- App VM: middle tier, internet-capable
+- DB VM: accessible only from App VM
+
+APPROACH USED: Direct, step-by-step technical answer with no specialized skill invoked.
+
+SOLUTION OVERVIEW:
+- Two Proxmox bridges: vmbr0 (WAN/public) and vmbr1 (private LAN 10.0.1.0/24)
+- Web VM: dual-homed (vmbr0 + vmbr1) for public access and internal communication
+- App VM: LAN-only (vmbr1), internet via NAT on Proxmox host
+- DB VM: LAN-only (vmbr1), no internet route
+
+KEY COMPONENTS COVERED:
+1. /etc/network/interfaces bridge configuration on Proxmox host
+2. Netplan IP config for each VM
+3. iptables NAT/MASQUERADE rules + IP forwarding on host
+4. UFW per-VM firewall rules (Web: 80/443, App: 8080 from Web, DB: 5432 from App only)
+5. Proxmox built-in firewall as optional extra layer
+6. Connectivity testing commands
+7. Security recommendations (SSH keys, Fail2Ban, Let's Encrypt, backups)
+
+QUALITY NOTES:
+- Response is comprehensive and technically accurate
+- Covers all three isolation requirements
+- Includes ASCII topology diagrams
+- Provides troubleshooting commands
+- Could be improved with: more explicit DB internet block, VLAN-based isolation option, pfSense/OPNsense VM alternative

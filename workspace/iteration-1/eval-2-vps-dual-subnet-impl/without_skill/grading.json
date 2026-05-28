@@ -1,0 +1,45 @@
+{
+  "eval_id": 2,
+  "eval_name": "vps-dual-subnet-impl",
+  "configuration": "without_skill",
+  "expectations": [
+    {
+      "text": "networking.md file was written to outputs directory",
+      "passed": true,
+      "evidence": "networking.md mevcut — bridge config, iptables, dnsmasq, doğrulama mevcut"
+    },
+    {
+      "text": "A bash setup script was generated",
+      "passed": false,
+      "evidence": "Sadece networking.md üretilmiş, ayrı bir setup.sh scripti yok"
+    },
+    {
+      "text": "Setup script uses set -euo pipefail for safety",
+      "passed": false,
+      "evidence": "Script üretilmediğinden bu assertion uygulanamaz — FAILED"
+    },
+    {
+      "text": "Output includes DROP or REJECT rules for the isolated subnet 10.0.2.0/24",
+      "passed": true,
+      "evidence": "Agent summary: 'FORWARD DROP for virbr2 -> eth0 and eth0 -> virbr2 (full isolation)' mevcut"
+    },
+    {
+      "text": "Output includes MASQUERADE rule for 10.0.1.0/24",
+      "passed": true,
+      "evidence": "'POSTROUTING MASQUERADE for 10.0.1.0/24 through eth0' var"
+    },
+    {
+      "text": "Output includes rollback commands or iptables flush commands",
+      "passed": false,
+      "evidence": "Agent summary'de rollback section'dan bahsedilmiyor"
+    },
+    {
+      "text": "Output warns about SSH connectivity before applying firewall rules",
+      "passed": false,
+      "evidence": "Agent summary'de SSH korumasından bahsedilmiyor; script olmadığı için SSH-safe sıralama yapılmamış"
+    }
+  ],
+  "pass_count": 3,
+  "total_count": 7,
+  "pass_rate": 0.429
+}

@@ -1,0 +1,43 @@
+{
+  "eval_id": 1,
+  "eval_name": "vm-internet-troubleshoot",
+  "prompt": "Proxmox'ta vmbr1'e bağlı VM'lerim internete çıkamıyor. IP adresi var (10.10.1.10/24) ama dışarıya ping atamıyor. Ne yapmalıyım?",
+  "assertions": [
+    {
+      "id": "ip-forward-check",
+      "description": "Output includes check for IP forwarding (/proc/sys/net/ipv4/ip_forward or sysctl)",
+      "type": "string_contains",
+      "value": "ip_forward"
+    },
+    {
+      "id": "nat-table-check",
+      "description": "Output includes iptables NAT table inspection command",
+      "type": "string_contains",
+      "value": "iptables -t nat"
+    },
+    {
+      "id": "masquerade-diagnosis",
+      "description": "Output identifies missing MASQUERADE rule as a likely cause",
+      "type": "string_contains",
+      "value": "MASQUERADE"
+    },
+    {
+      "id": "phased-approach",
+      "description": "Output follows a phased troubleshoot approach (read-only first, then fix)",
+      "type": "manual",
+      "guidance": "Check if the output separates diagnostics from fix — no destructive commands in Phase 1"
+    },
+    {
+      "id": "verification-commands",
+      "description": "Output includes verification commands after fix (ping, curl)",
+      "type": "manual",
+      "guidance": "Look for ping or curl commands to verify connectivity after applying fix"
+    },
+    {
+      "id": "no-immediate-destructive",
+      "description": "Output does NOT apply iptables changes without presenting them to user first",
+      "type": "manual",
+      "guidance": "The output should present diagnostic commands first, not immediately fire off iptables rules"
+    }
+  ]
+}

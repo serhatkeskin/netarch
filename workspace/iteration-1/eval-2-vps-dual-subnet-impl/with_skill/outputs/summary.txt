@@ -1,0 +1,47 @@
+NETARCH EVAL — VPS Dual Subnet Implementation
+==============================================
+Date: 2026-05-28
+Task: Two subnets on VPS (203.0.113.5)
+  - 10.0.1.0/24: NAT bridge, VMs get internet access
+  - 10.0.2.0/24: Isolated bridge, zero external access
+
+SKILL WORKFLOW FOLLOWED:
+  Step 1 - Understood goal: 2 subnets, one NAT, one air-gapped
+  Step 2 - Designed topology with Mermaid diagram + ASCII fallback
+  Step 3 - Wrote networking.md with full architecture doc
+  Step 4 - Generated implementation script (Option B: scp + run)
+  Step 5 - Embedded verification commands in both files
+
+OUTPUTS:
+  networking.md     — Full architecture doc: Mermaid diagram, subnet table,
+                      traffic policy table, iptables rules summary,
+                      VM config examples, verification commands, rollback
+  netarch-setup.sh  — Runnable bash script (set -euo pipefail):
+                      Detects public interface automatically,
+                      Installs bridge-utils + iptables-persistent,
+                      Enables IP forwarding (runtime + sysctl persist),
+                      Adds vmbr1 (NAT) and vmbr2 (isolated) to
+                        /etc/network/interfaces with post-up hooks,
+                      Brings bridges up immediately (no reboot needed),
+                      Applies full iptables ruleset (SSH-safe order),
+                      Persists rules via netfilter-persistent,
+                      Prints verification output at end
+
+DEPLOYMENT COMMANDS:
+  scp netarch-setup.sh root@203.0.113.5:/tmp/
+  ssh root@203.0.113.5 "bash /tmp/netarch-setup.sh"
+
+KEY SAFETY DECISIONS:
+  - SSH ACCEPT rule added BEFORE iptables -P INPUT DROP
+  - ESTABLISHED,RELATED accepted first in both INPUT and FORWARD
+  - /etc/network/interfaces backed up before modification
+  - Rollback commands documented in both files
+  - Public interface auto-detected (not hardcoded to eth0)
+
+SKILL QUALITY NOTES:
+  - Skill correctly triggered on "VPS subnets" + "izole" (isolation) language
+  - Mermaid diagram + ASCII fallback both generated (per SKILL.md Step 2)
+  - All reference patterns (proxmox.md NAT bridge, iptables.md baseline)
+    were applied directly and correctly
+  - Script is idempotent-safe: checks before adding bridges
+  - No commands run against real server (simulation mode honored)

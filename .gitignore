@@ -1,0 +1,14 @@
+# OS
+.DS_Store
+*.swp
+
+# Logs (keep structure, ignore content)
+workspace/iteration-*/eval-*/with_skill/outputs/*.log
+workspace/iteration-*/eval-*/without_skill/outputs/*.log
+
+# Large generated files (optional)
+# workspace/iteration-*/eval-*/with_skill/outputs/
+
+# Python cache
+__pycache__/
+*.pyc

@@ -1,0 +1,63 @@
+NETARCH SKILL — EVAL-0 OUTPUT SUMMARY
+Task: Proxmox 3-VM network design (Web/App/DB isolation)
+Date: 2026-05-28
+
+WHAT WAS PRODUCED
+-----------------
+networking.md — Full architecture document including:
+
+1. TOPOLOGY DESIGN
+   - 2 isolated bridges: vmbr1 (DMZ, 10.10.1.0/24) and vmbr2 (Internal, 10.10.2.0/24)
+   - Web VM (10.10.1.10) on DMZ — internet-facing via DNAT port 80/443
+   - App VM (10.10.2.10) on Internal — reachable from Web VM, has internet egress via NAT
+   - DB VM (10.10.2.20) on Internal — reachable ONLY from App VM on port 5432, no internet egress
+
+2. MERMAID DIAGRAM + ASCII FALLBACK
+   - Full topology graph with traffic flow annotations
+
+3. SUBNET TABLE
+   - CIDR, bridge, gateway, purpose for each network segment
+   - Per-VM IP assignment table
+
+4. TRAFFIC POLICY TABLE
+   - 9 rows covering all source/destination combinations with explicit ALLOW/DENY decisions
+
+5. /etc/network/interfaces CONFIG
+   - vmbr1 block with post-up NAT (MASQUERADE) and DNAT rules for Web VM
+   - vmbr2 block with post-up NAT for App VM only (DB excluded)
+
+6. IPTABLES RULESET (netarch-setup.sh)
+   - ESTABLISHED/RELATED fast path first
+   - Host INPUT rules (SSH, ICMP, Proxmox UI port 8006)
+   - FORWARD rules in correct order: specific ACCEPTs before broad DROPs
+   - MASQUERADE for Web VM and App VM subnets
+   - DNAT for public ports 80/443 → Web VM
+   - Default DROP policies on INPUT and FORWARD
+   - iptables-persistent save at end
+
+7. VM NETWORK CONFIG SNIPPETS
+   - /etc/network/interfaces (or Netplan) for each VM
+
+8. STEP-BY-STEP APPLY SEQUENCE
+   - Risk-labeled steps: [READ-ONLY], [CONFIG CHANGE], [NETWORK CHANGE]
+   - Verification commands for each VM
+
+9. ROLLBACK COMMANDS
+   - Full iptables flush + interfaces backup restore
+
+KEY DESIGN DECISIONS
+--------------------
+- DB VM has a gateway configured but NO FORWARD rule to vmbr0 — internet is blocked at the firewall level
+- App VM internet egress uses specific source IP (10.10.2.10), not the whole /24, so DB (10.10.2.20) cannot sneak out
+- Web→App and App→DB rules are port-specific (8080 and 5432) — not open-ended
+- ESTABLISHED/RELATED rules enable stateful tracking so return traffic works without extra rules
+- post-up hooks in /etc/network/interfaces ensure NAT rules survive interface restarts
+- Rollback script provided before any destructive commands
+
+SKILL WORKFLOW FOLLOWED
+-----------------------
+Step 1: Understood goal from task description (no ambiguity, no extra questions needed)
+Step 2: Designed topology with Mermaid + ASCII diagram
+Step 3: Wrote full networking.md with subnets, policy table, and all commands
+Step 4: Provided implementation sequence with risk labels and verification steps
+(Steps not executed: SSH apply — simulation mode)

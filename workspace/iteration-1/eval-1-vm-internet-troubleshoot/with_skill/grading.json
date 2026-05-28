@@ -1,0 +1,40 @@
+{
+  "eval_id": 1,
+  "eval_name": "vm-internet-troubleshoot",
+  "configuration": "with_skill",
+  "expectations": [
+    {
+      "text": "Output includes check for IP forwarding (/proc/sys/net/ipv4/ip_forward or sysctl)",
+      "passed": true,
+      "evidence": "Phase 1 Komut 1: 'cat /proc/sys/net/ipv4/ip_forward' — kritik olarak işaretlenmiş"
+    },
+    {
+      "text": "Output includes iptables NAT table inspection command",
+      "passed": true,
+      "evidence": "Phase 1 Komut 7: 'sudo iptables -t nat -L -n -v' mevcut"
+    },
+    {
+      "text": "Output identifies missing MASQUERADE rule as a likely cause",
+      "passed": true,
+      "evidence": "Agent summary: 'Root causes: ip_forward=0, missing MASQUERADE NAT rule, FORWARD chain DROP policy' — Phase 2 diagnosis tablosunda açıkça belirtilmiş"
+    },
+    {
+      "text": "Output follows a phased troubleshoot approach (read-only first, then fix)",
+      "passed": true,
+      "evidence": "Phase 1 (READ-ONLY diagnostics), Phase 2 (Diagnose), Phase 3 (Fix), Phase 4 (Verify) — tam 4 aşama uygulanmış"
+    },
+    {
+      "text": "Output includes verification commands after fix (ping, curl)",
+      "passed": true,
+      "evidence": "Agent summary: 'Phase 4: 8 verification commands with expected outputs, including packet counter check'"
+    },
+    {
+      "text": "Output does NOT apply iptables changes without presenting them to user first",
+      "passed": true,
+      "evidence": "Phase 1 tamamen READ-ONLY, sadece 'çalıştırın' talimatı var. Değişiklikler Phase 3'e kadar yapılmıyor ve önce rollback gösteriliyor"
+    }
+  ],
+  "pass_count": 6,
+  "total_count": 6,
+  "pass_rate": 1.0
+}

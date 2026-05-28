@@ -1,0 +1,45 @@
+{
+  "eval_id": 2,
+  "eval_name": "vps-dual-subnet-impl",
+  "configuration": "with_skill",
+  "expectations": [
+    {
+      "text": "networking.md file was written to outputs directory",
+      "passed": true,
+      "evidence": "networking.md mevcut (7.2 KB) — Mermaid diyagram, subnet tablosu, traffic policy, /etc/network/interfaces config, doğrulama komutları, rollback içeriyor"
+    },
+    {
+      "text": "A bash setup script was generated",
+      "passed": true,
+      "evidence": "netarch-setup.sh mevcut (8.0 KB) — production-ready script"
+    },
+    {
+      "text": "Setup script uses set -euo pipefail for safety",
+      "passed": true,
+      "evidence": "netarch-setup.sh satır 20: 'set -euo pipefail' mevcut"
+    },
+    {
+      "text": "Output includes DROP or REJECT rules for the isolated subnet 10.0.2.0/24",
+      "passed": true,
+      "evidence": "Agent summary: 'FORWARD DROP for virbr2 -> eth0 and eth0 -> virbr2 (full isolation)' ve 'FORWARD DROP between virbr1 and virbr2'"
+    },
+    {
+      "text": "Output includes MASQUERADE rule for 10.0.1.0/24",
+      "passed": true,
+      "evidence": "Script ve networking.md'de: 'POSTROUTING MASQUERADE for 10.0.1.0/24 through eth0' mevcut"
+    },
+    {
+      "text": "Output includes rollback commands or iptables flush commands",
+      "passed": true,
+      "evidence": "networking.md'de rollback section ve script başında rollback komutları mevcut"
+    },
+    {
+      "text": "Output warns about SSH connectivity before applying firewall rules",
+      "passed": true,
+      "evidence": "Agent summary: 'Applies iptables in SSH-safe order: ESTABLISHED/SSH ACCEPT before -P INPUT DROP' — SSH connection korunuyor"
+    }
+  ],
+  "pass_count": 7,
+  "total_count": 7,
+  "pass_rate": 1.0
+}

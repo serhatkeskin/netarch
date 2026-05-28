@@ -1,0 +1,50 @@
+{
+  "eval_id": 2,
+  "eval_name": "vps-dual-subnet-impl",
+  "prompt": "VPS'imde iki subnet istiyorum: 10.0.1.0/24 (VM'ler internete çıkabilsin) ve 10.0.2.0/24 (tamamen izole, hiçbir dış erişim yok). ssh root@203.0.113.5 ile bağlanabilirim.",
+  "assertions": [
+    {
+      "id": "networking-md-produced",
+      "description": "networking.md file was written to outputs directory",
+      "type": "file_exists",
+      "path": "with_skill/outputs/networking.md"
+    },
+    {
+      "id": "setup-script-produced",
+      "description": "A bash setup script was generated",
+      "type": "file_exists",
+      "path": "with_skill/outputs/netarch-setup.sh"
+    },
+    {
+      "id": "safe-bash-script",
+      "description": "Setup script uses set -euo pipefail for safety",
+      "type": "string_contains_in_file",
+      "file": "with_skill/outputs/netarch-setup.sh",
+      "value": "set -euo pipefail"
+    },
+    {
+      "id": "isolated-subnet-drop",
+      "description": "Output includes DROP or REJECT rules for the isolated subnet 10.0.2.0/24",
+      "type": "manual",
+      "guidance": "Look for iptables rules that block all ingress/egress for 10.0.2.0/24 from/to external networks"
+    },
+    {
+      "id": "nat-subnet-masquerade",
+      "description": "Output includes MASQUERADE rule for 10.0.1.0/24",
+      "type": "string_contains",
+      "value": "MASQUERADE"
+    },
+    {
+      "id": "rollback-present",
+      "description": "Output includes rollback commands or iptables flush commands",
+      "type": "manual",
+      "guidance": "Look for iptables -F or a rollback section in the output"
+    },
+    {
+      "id": "ssh-survives-warning",
+      "description": "Output warns about SSH connectivity before applying firewall rules",
+      "type": "manual",
+      "guidance": "Check if output mentions preserving SSH access or adds SSH ACCEPT rule before any DROP policy"
+    }
+  ]
+}

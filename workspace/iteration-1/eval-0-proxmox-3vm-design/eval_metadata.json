@@ -1,0 +1,43 @@
+{
+  "eval_id": 0,
+  "eval_name": "proxmox-3vm-design",
+  "prompt": "Proxmox'umda 3 VM var: web sunucusu (internete açık), uygulama sunucusu ve veritabanı. Web dışarıdan erişilebilsin, DB sadece app VM'inden erişilebilsin, ikisi de internete çıkabilsin. Nasıl kurarım?",
+  "assertions": [
+    {
+      "id": "mermaid-diagram",
+      "description": "Output contains a Mermaid diagram block (```mermaid)",
+      "type": "string_contains",
+      "value": "```mermaid"
+    },
+    {
+      "id": "three-networks",
+      "description": "Output defines at least 3 distinct networks or bridges (DMZ/web, app, DB)",
+      "type": "manual",
+      "guidance": "Check if the output separates web, app, and DB into distinct subnets or bridges"
+    },
+    {
+      "id": "db-isolation-rule",
+      "description": "Output explicitly states DB is accessible only from app subnet (iptables DROP or similar)",
+      "type": "manual",
+      "guidance": "Look for iptables rule or config that blocks DMZ/web from reaching DB subnet, allows only app"
+    },
+    {
+      "id": "iptables-forward-rules",
+      "description": "Output includes iptables FORWARD chain rules",
+      "type": "string_contains",
+      "value": "FORWARD"
+    },
+    {
+      "id": "subnet-table",
+      "description": "Output includes a subnet/network table with CIDR notation",
+      "type": "string_contains",
+      "value": "/24"
+    },
+    {
+      "id": "networking-md-produced",
+      "description": "networking.md file was actually written to outputs directory",
+      "type": "file_exists",
+      "path": "with_skill/outputs/networking.md"
+    }
+  ]
+}

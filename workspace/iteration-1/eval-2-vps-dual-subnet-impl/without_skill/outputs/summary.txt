@@ -1,0 +1,19 @@
+Task: Configure two subnets on VPS 203.0.113.5
+- 10.0.1.0/24: NAT subnet (VMs get internet access via masquerade)
+- 10.0.2.0/24: Isolated subnet (no inbound or outbound external access)
+
+Approach:
+- Created two Linux bridge interfaces (virbr1, virbr2) on the VPS host
+- Enabled IP forwarding (net.ipv4.ip_forward=1)
+- iptables FORWARD + NAT rules for internet access on virbr1
+- iptables DROP rules to fully isolate virbr2 from internet and from virbr1
+- Optional dnsmasq DHCP for both subnets
+- Persistence via /etc/network/interfaces or NetworkManager
+
+Key rules:
+- POSTROUTING MASQUERADE: 10.0.1.0/24 -> eth0 (internet NAT)
+- FORWARD DROP: virbr2 -> eth0 and eth0 -> virbr2 (isolation)
+- FORWARD DROP: virbr1 <-> virbr2 (cross-subnet block)
+
+No skill or framework was used. Output is a step-by-step command guide covering
+interface setup, iptables rules, DHCP config, VM attachment, and verification steps.

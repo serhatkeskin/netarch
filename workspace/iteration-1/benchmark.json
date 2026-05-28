@@ -1,0 +1,76 @@
+{
+  "skill_name": "netarch",
+  "iteration": 1,
+  "configurations": [
+    {
+      "name": "with_skill",
+      "evals": [
+        {
+          "eval_id": 0,
+          "eval_name": "proxmox-3vm-design",
+          "pass_rate": 1.0,
+          "total_tokens": 23674,
+          "duration_ms": 124522
+        },
+        {
+          "eval_id": 1,
+          "eval_name": "vm-internet-troubleshoot",
+          "pass_rate": 1.0,
+          "total_tokens": 21751,
+          "duration_ms": 99662
+        },
+        {
+          "eval_id": 2,
+          "eval_name": "vps-dual-subnet-impl",
+          "pass_rate": 1.0,
+          "total_tokens": 24404,
+          "duration_ms": 119975
+        }
+      ],
+      "mean_pass_rate": 1.0,
+      "mean_tokens": 23276,
+      "mean_duration_ms": 114720
+    },
+    {
+      "name": "without_skill",
+      "evals": [
+        {
+          "eval_id": 0,
+          "eval_name": "proxmox-3vm-design",
+          "pass_rate": 0.667,
+          "total_tokens": 14467,
+          "duration_ms": 93126
+        },
+        {
+          "eval_id": 1,
+          "eval_name": "vm-internet-troubleshoot",
+          "pass_rate": 0.833,
+          "total_tokens": 13017,
+          "duration_ms": 65935
+        },
+        {
+          "eval_id": 2,
+          "eval_name": "vps-dual-subnet-impl",
+          "pass_rate": 0.429,
+          "total_tokens": 14026,
+          "duration_ms": 88067
+        }
+      ],
+      "mean_pass_rate": 0.643,
+      "mean_tokens": 13837,
+      "mean_duration_ms": 82376
+    }
+  ],
+  "delta": {
+    "pass_rate": 0.357,
+    "tokens": 9439,
+    "duration_ms": 32344
+  },
+  "analyst_observations": [
+    "with_skill: %100 pass rate (19/19 assertion). without_skill: %64 (12/19 assertion)",
+    "En büyük fark Eval 2'de: with_skill 7/7, without_skill 3/7 — setup script üretmek ve SSH güvenliği kritik fark",
+    "with_skill daha fazla token kullanıyor (~23k vs ~14k) çünkü Mermaid diyagram, ASCII fallback, rollback section gibi yapısal çıktılar üretiyor",
+    "Eval 1 (troubleshoot) en yakın sonuç: with_skill 6/6, without_skill 5/6 — temel troubleshoot bilgisi skillsiz de mevcut, fark phased approach yapısında",
+    "Mermaid diyagram en güçlü ayrıştırıcı: with_skill her eval'de üretiyor, without_skill hiçbirinde üretmiyor"
+  ]
+}

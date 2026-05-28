@@ -1,0 +1,40 @@
+{
+  "eval_id": 0,
+  "eval_name": "proxmox-3vm-design",
+  "configuration": "without_skill",
+  "expectations": [
+    {
+      "text": "Output contains a Mermaid diagram block (```mermaid)",
+      "passed": false,
+      "evidence": "Sadece ASCII/text diyagram var (``` blokları), Mermaid syntax yok"
+    },
+    {
+      "text": "Output defines at least 3 distinct networks or bridges (DMZ/web, app, DB)",
+      "passed": false,
+      "evidence": "Sadece 2 bridge: vmbr0 (WAN) ve vmbr1 (private LAN). App ve DB aynı subnet'te (10.0.1.0/24)"
+    },
+    {
+      "text": "Output explicitly states DB is accessible only from app subnet (iptables DROP or similar)",
+      "passed": true,
+      "evidence": "UFW kurallarıyla DB'ye sadece App VM'den (10.0.1.20) 5432 izni verilmiş. iptables FORWARD ile değil, VM-level UFW ile yapılmış"
+    },
+    {
+      "text": "Output includes iptables FORWARD chain rules",
+      "passed": true,
+      "evidence": "iptables -A FORWARD -i vmbr1 -o vmbr0 -j ACCEPT ve ESTABLISHED/RELATED kuralları mevcut"
+    },
+    {
+      "text": "Output includes a subnet/network table with CIDR notation",
+      "passed": true,
+      "evidence": "Erişim Kuralları tablosu var, ve config'lerde 10.0.1.x/24 CIDR kullanılmış"
+    },
+    {
+      "text": "networking.md file was actually written to outputs directory",
+      "passed": true,
+      "evidence": "Dosya mevcut: eval-0-proxmox-3vm-design/without_skill/outputs/networking.md"
+    }
+  ],
+  "pass_count": 4,
+  "total_count": 6,
+  "pass_rate": 0.667
+}
