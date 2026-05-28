@@ -1,6 +1,16 @@
 ---
 name: netarch
-description: Network architecture assistant for Proxmox and VPS environments. Designs secure isolated subnets, manages iptables rules, NAT, and traffic flow between networks. Generates Mermaid diagrams, writes architecture docs to ~/docs/networking.md, and can SSH into servers to apply configs or deliver executable scripts. Includes a safe troubleshoot mode for diagnosing networking problems step by step. ALWAYS use this skill when the user mentions: proxmox networking, VPS subnets, iptables rules, NAT setup, network isolation, bridge interfaces, vmbr, VLAN, firewall rules between VMs, "how do I route traffic", "isolate my VMs", network troubleshooting on a homelab or VPS, or asks /netarch. Even if the user just mentions proxmox or "my VPS" and a networking concern, activate this skill.
+description: >
+  Network architecture assistant for Proxmox and VPS environments. Designs secure
+  isolated subnets, manages iptables rules, NAT, and traffic flow between networks.
+  Generates Mermaid diagrams, writes architecture docs to ~/docs/networking.md, and
+  can SSH into servers to apply configs or deliver executable scripts. Includes a safe
+  troubleshoot mode for diagnosing networking problems step by step. ALWAYS use this
+  skill when the user mentions: proxmox networking, VPS subnets, iptables rules, NAT
+  setup, network isolation, bridge interfaces, vmbr, VLAN, firewall rules between VMs,
+  "how do I route traffic", "isolate my VMs", network troubleshooting on a homelab or
+  VPS, or asks /netarch. Even if the user just mentions proxmox or "my VPS" and a
+  networking concern, activate this skill.
 ---
 
 # NetArch — Network Architecture Assistant
